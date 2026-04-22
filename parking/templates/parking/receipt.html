@@ -1,0 +1,62 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Receipt{% endblock %}
+{% block page_heading %}Receipt{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm receipt-card">
+            <div class="card-body p-4">
+                <h4 class="fw-bold text-center mb-0">ParkEase</h4>
+                <p class="text-muted text-center mb-3" style="font-size:13px;">Official Parking Receipt</p>
+                <hr>
+                <div class="receipt-row">
+                    <span class="label">Receipt No.</span>
+                    <span class="value">{{ transaction.receipt_number }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Number Plate</span>
+                    <span class="value">{{ vehicle.plate }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Driver</span>
+                    <span class="value">{{ vehicle.driver_name }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Vehicle Type</span>
+                    <span class="value">{{ vehicle.get_vehicle_type_display }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Arrival</span>
+                    <span class="value">{{ vehicle.arrival_time|date:"h:i A — M d, Y" }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Sign Out</span>
+                    <span class="value">{{ transaction.sign_out_time|date:"h:i A — M d, Y" }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Duration</span>
+                    <span class="value">{{ hours }} hrs {{ minutes }} mins</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Receiver</span>
+                    <span class="value">{{ transaction.receiver_name }}</span>
+                </div>
+                <hr>
+                <div class="receipt-row" style="font-size:16px;">
+                    <span class="label fw-bold">Total Fee</span>
+                    <span class="value">UGX {{ transaction.fee }}</span>
+                </div>
+                <hr>
+                <div class="d-flex gap-2 justify-content-center mt-3">
+                    <a href="{% url 'vehicle_list' %}" class="btn btn-primary">Back to Vehicles</a>
+                    <button onclick="window.print()" class="btn btn-outline-secondary">Print Receipt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

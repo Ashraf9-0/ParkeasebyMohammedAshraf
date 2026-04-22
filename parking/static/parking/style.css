@@ -1,0 +1,159 @@
+/* Sidebar */
+.sidebar {
+    min-height: 100vh;
+    background: #1a1a2e;
+    width: 240px;
+    flex-shrink: 0;
+}
+
+.sidebar a {
+    color: #a0a0b0;
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #16213e;
+    color: #fff;
+}
+
+.sidebar .brand {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 20px;
+    border-bottom: 1px solid #2a2a4a;
+    margin-bottom: 16px;
+}
+
+.sidebar .section-label {
+    color: #555570;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: 8px 20px 4px;
+}
+
+/* Main content */
+.main-content {
+    background: #f8f9fa;
+    min-height: 100vh;
+    flex-grow: 1;
+}
+
+/* Top bar */
+.top-bar {
+    background: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Cards */
+.stat-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.stat-card .stat-label {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 4px;
+}
+
+.stat-card .stat-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a1a2e;
+}
+
+/* Tables */
+.table th {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+}
+
+.table td {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+/* Buttons */
+.btn-primary {
+    background: #1a1a2e;
+    border-color: #1a1a2e;
+}
+
+.btn-primary:hover {
+    background: #16213e;
+    border-color: #16213e;
+}
+
+/* Receipt */
+.receipt-card {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.receipt-row .label {
+    color: #888;
+}
+
+.receipt-row .value {
+    font-weight: 600;
+}
+
+/* Login page */
+.login-wrapper {
+    background: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* Form */
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #444;
+}
+
+.form-control,
+.form-select {
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #1a1a2e;
+    box-shadow: 0 0 0 3px rgba(26,26,46,0.1);
+}

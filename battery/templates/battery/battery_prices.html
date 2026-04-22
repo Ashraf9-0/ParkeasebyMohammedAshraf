@@ -1,0 +1,87 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Manage Battery Prices{% endblock %}
+{% block page_heading %}Manage Battery Prices{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">Add Battery Item</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add">
+
+                    <div class="mb-3">
+                        <label class="form-label">Battery Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. 12V 100AH Battery" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select name="battery_type" class="form-select" required>
+                            <option value="" disabled selected>Select type...</option>
+                            <option value="hire">Hire</option>
+                            <option value="sale">Sale</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Price (UGX)</label>
+                        <input type="number" name="price" class="form-control" placeholder="e.g. 50000" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description <span class="text-muted">(optional)</span></label>
+                        <textarea name="description" class="form-control" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Battery</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <span class="fw-bold">Current Battery Items</span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for battery in batteries %}
+                        <tr>
+                            <td>{{ battery.name }}</td>
+                            <td>{{ battery.get_battery_type_display }}</td>
+                            <td>UGX {{ battery.price }}</td>
+                            <td>
+                                <form method="POST" style="display:inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="battery_id" value="{{ battery.id }}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">No batteries added yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

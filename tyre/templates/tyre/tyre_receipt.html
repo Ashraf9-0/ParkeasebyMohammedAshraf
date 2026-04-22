@@ -1,0 +1,50 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Tyre Receipt{% endblock %}
+{% block page_heading %}Tyre Receipt{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm receipt-card">
+            <div class="card-body p-4">
+                <h4 class="fw-bold text-center mb-0">ParkEase</h4>
+                <p class="text-muted text-center mb-3" style="font-size:13px;">Tyre Clinic Receipt</p>
+                <hr>
+                <div class="receipt-row">
+                    <span class="label">Number Plate</span>
+                    <span class="value">{{ service.plate }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Driver</span>
+                    <span class="value">{{ service.driver_name }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Service</span>
+                    <span class="value">{{ service.get_service_type_display }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="label">Date</span>
+                    <span class="value">{{ service.date|date:"h:i A — M d, Y" }}</span>
+                </div>
+                {% if service.notes %}
+                <div class="receipt-row">
+                    <span class="label">Notes</span>
+                    <span class="value">{{ service.notes }}</span>
+                </div>
+                {% endif %}
+                <hr>
+                <div class="receipt-row" style="font-size:16px;">
+                    <span class="label fw-bold">Total</span>
+                    <span class="value">UGX {{ service.price }}</span>
+                </div>
+                <hr>
+                <div class="d-flex gap-2 justify-content-center mt-3">
+                    <a href="{% url 'tyre_list' %}" class="btn btn-primary">Back to Services</a>
+                    <button onclick="window.print()" class="btn btn-outline-secondary">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

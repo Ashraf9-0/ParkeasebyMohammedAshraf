@@ -1,0 +1,48 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Battery Transaction{% endblock %}
+{% block page_heading %}Battery Transaction{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">Record Battery Transaction</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Driver Name</label>
+                            <input type="text" name="driver_name" class="form-control" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Number Plate</label>
+                            <input type="text" name="plate" class="form-control" placeholder="e.g. UAX123" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Select Battery</label>
+                        <select name="battery_id" class="form-select" required>
+                            <option value="" disabled selected>Select battery...</option>
+                            {% for battery in batteries %}
+                                <option value="{{ battery.id }}">
+                                    {{ battery.name }} ({{ battery.get_battery_type_display }}) — UGX {{ battery.price }}
+                                </option>
+                            {% empty %}
+                                <option disabled>No batteries available — ask manager to add prices</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Record Transaction</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

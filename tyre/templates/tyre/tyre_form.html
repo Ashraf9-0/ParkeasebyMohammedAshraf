@@ -1,0 +1,69 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Tyre Service{% endblock %}
+{% block page_heading %}Tyre Service{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">Record Tyre Service</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Driver Name</label>
+                            <input type="text" name="driver_name" class="form-control" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Number Plate</label>
+                            <input type="text" name="plate" class="form-control" placeholder="e.g. UAX123" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Service Type</label>
+                        <select name="service_type" class="form-select" id="serviceType" required>
+                            <option value="" disabled selected>Select service...</option>
+                            <option value="pressure">Pressure Check — UGX 500</option>
+                            <option value="puncture">Puncture Fixing — UGX 5,000</option>
+                            <option value="valve">Valve Replacement — UGX 5,000</option>
+                            <option value="tyre_13">Tyre Size 13</option>
+                            <option value="tyre_14">Tyre Size 14</option>
+                            <option value="tyre_15">Tyre Size 15</option>
+                            <option value="tyre_16">Tyre Size 16</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="tyrePriceField" style="display:none;">
+                        <label class="form-label">Tyre Price (UGX)</label>
+                        <input type="number" name="custom_price" class="form-control" placeholder="Enter price for this tyre size">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Notes <span class="text-muted">(optional)</span></label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Any additional notes..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Record Service</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('serviceType').addEventListener('change', function() {
+        const tyrePriceField = document.getElementById('tyrePriceField');
+        if (this.value.startsWith('tyre_')) {
+            tyrePriceField.style.display = 'block';
+        } else {
+            tyrePriceField.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}
