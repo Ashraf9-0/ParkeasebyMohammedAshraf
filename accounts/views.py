@@ -10,8 +10,12 @@ def login_view(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('dashboard')
+            if username=="admin":
+                login(request, user)
+                return redirect('dashboard')
+            elif username=="attendant":
+                login(request,user)
+                return redirect('vehicles')
         else:
             messages.error(request, 'Invalid username or password')
     return render(request, 'accounts/login.html')

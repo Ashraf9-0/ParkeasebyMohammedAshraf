@@ -1,0 +1,13 @@
+venv
+accounts/__pycache__
+accounts/migrations/__pycache__
+battery/__pycache__
+battery/migrations/__pycache__
+parkease/__pycache__
+parking/__pycache__
+parking/migrations/__pycache__
+tyre/__pycache__
+tyre/migrations/__pycache__
+db.sqlite3
+__pycache__/
+*.pyc
