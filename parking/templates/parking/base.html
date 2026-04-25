@@ -19,6 +19,10 @@
         {% if user.username == "attendant"  %}
           <a href="/vehicles/">All Vehicles</a>
           <a href="/register/">Register Vehicle</a>
+        {% elif user.username == "section" %}
+          <div class="section-label">Services</div>
+          <a href="/tyre/">Tyre Clinic</a>
+          <a href="/battery/">Battery Section</a>
         {% elif user.username == "admin" %}
           <div class="section-label">Main</div>
           <a href="/dashboard/">Dashboard</a>

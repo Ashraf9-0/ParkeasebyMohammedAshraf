@@ -15,7 +15,10 @@ def login_view(request):
                 return redirect('dashboard')
             elif username=="attendant":
                 login(request,user)
-                return redirect('vehicles')
+                return redirect('vehicles/')
+            elif username=="section":
+                login(request, user)
+                return redirect('tyre/')
         else:
             messages.error(request, 'Invalid username or password')
     return render(request, 'accounts/login.html')
