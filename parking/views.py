@@ -202,10 +202,14 @@ def daily_report(request):
         sign_out_time__date=date
     ).order_by('-sign_out_time')
     tyre_services    = TyreService.objects.filter(date__date=date)
-    battery_trans    = BatteryTransaction.objects.filter(date__date=date)
+    battery_trans    = BatteryTransaction.objects.filter(date_taken__date=date)
     parking_revenue  = sum(t.fee for t in transactions)
     tyre_revenue     = sum(s.price for s in tyre_services)
-    battery_revenue  = sum(t.battery.price for t in battery_trans)
+    battery_revenue  = sum(
+    t.battery.price if t.battery.battery_type == 'sale'
+    else (t.total_charged or 0)
+    for t in battery_trans
+)
     total_revenue    = parking_revenue + tyre_revenue + battery_revenue
     context = {
         'transactions':    transactions,

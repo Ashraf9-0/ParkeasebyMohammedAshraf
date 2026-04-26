@@ -4,7 +4,6 @@
 {% block page_heading %}Battery Transactions{% endblock %}
 
 {% block content %}
-
 <div class="row g-4 mb-4">
     <div class="col-md-4">
         <div class="stat-card">
@@ -20,17 +19,51 @@
     </div>
     <div class="col-md-4">
         <div class="stat-card">
-            <div class="stat-label">All Time</div>
-            <div class="stat-value">{{ all_transactions }}</div>
+            <div class="stat-label">Batteries Currently Out</div>
+            <div class="stat-value">{{ batteries_out.count }}</div>
         </div>
     </div>
 </div>
 
+{% if batteries_out %}
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-header bg-warning bg-opacity-25">
+        <span class="fw-bold">⚡ Batteries Currently Out on Hire</span>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Plate</th>
+                    <th>Driver</th>
+                    <th>Battery</th>
+                    <th>Rate</th>
+                    <th>Date Taken</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in batteries_out %}
+                <tr>
+                    <td><strong>{{ t.plate }}</strong></td>
+                    <td>{{ t.driver_name }}</td>
+                    <td>{{ t.battery.name }}</td>
+                    <td>UGX {{ t.battery.daily_rate }}/day</td>
+                    <td>{{ t.date_taken|date:"h:i A — M d, Y" }}</td>
+                    <td><a href="{% url 'battery_return' t.pk %}" class="btn btn-sm btn-success">Return</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <span class="fw-bold">Transaction Records</span>
+        <span class="fw-bold">All Battery Transactions</span>
         <div class="d-flex gap-2">
-            <a href="{% url 'battery_prices' %}" class="btn btn-outline-secondary btn-sm">Manage Prices</a>
+            <a href="{% url 'battery_prices' %}" class="btn btn-outline-secondary btn-sm">Manage Batteries</a>
             <a href="{% url 'battery_form' %}" class="btn btn-primary btn-sm">+ New Transaction</a>
         </div>
     </div>
@@ -42,19 +75,27 @@
                     <th>Driver</th>
                     <th>Battery</th>
                     <th>Type</th>
-                    <th>Price</th>
-                    <th>Date</th>
+                    <th>Date Taken</th>
+                    <th>Status / Amount</th>
                 </tr>
             </thead>
             <tbody>
-                {% for transaction in transactions %}
+                {% for t in transactions %}
                 <tr>
-                    <td><strong>{{ transaction.plate }}</strong></td>
-                    <td>{{ transaction.driver_name }}</td>
-                    <td>{{ transaction.battery.name }}</td>
-                    <td>{{ transaction.battery.get_battery_type_display }}</td>
-                    <td>UGX {{ transaction.battery.price }}</td>
-                    <td>{{ transaction.date|date:"h:i A — M d, Y" }}</td>
+                    <td><strong>{{ t.plate }}</strong></td>
+                    <td>{{ t.driver_name }}</td>
+                    <td>{{ t.battery.name }}</td>
+                    <td>{{ t.battery.get_battery_type_display }}</td>
+                    <td>{{ t.date_taken|date:"h:i A — M d, Y" }}</td>
+                    <td>
+                        {% if t.battery.battery_type == 'sale' %}
+                            <span class="badge bg-secondary">Sold — UGX {{ t.battery.price }}</span>
+                        {% elif t.status == 'out' %}
+                            <span class="badge bg-warning text-dark">Out</span>
+                        {% elif t.status == 'returned' %}
+                            <span class="badge bg-success">Returned — UGX {{ t.total_charged }}</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -65,5 +106,4 @@
         </table>
     </div>
 </div>
-
 {% endblock %}

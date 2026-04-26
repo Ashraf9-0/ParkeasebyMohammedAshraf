@@ -1,42 +1,46 @@
 {% extends 'parking/base.html' %}
 {% load static %}
-{% block title %}Manage Battery Prices{% endblock %}
-{% block page_heading %}Manage Battery Prices{% endblock %}
+{% block title %}Manage Batteries{% endblock %}
+{% block page_heading %}Manage Batteries{% endblock %}
 
 {% block content %}
-
 <div class="row">
     <div class="col-md-5">
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white">
-                <h5 class="mb-0 fw-bold">Add Battery Item</h5>
+                <h5 class="mb-0 fw-bold">Add Battery</h5>
             </div>
             <div class="card-body p-4">
                 <form method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="add">
-
                     <div class="mb-3">
                         <label class="form-label">Battery Name</label>
                         <input type="text" name="name" class="form-control" placeholder="e.g. 12V 100AH Battery" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Type</label>
-                        <select name="battery_type" class="form-select" required>
+                        <select name="battery_type" id="typeSelect" class="form-select" required>
                             <option value="" disabled selected>Select type...</option>
                             <option value="hire">Hire</option>
                             <option value="sale">Sale</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Price (UGX)</label>
-                        <input type="number" name="price" class="form-control" placeholder="e.g. 50000" required>
+                    <div class="mb-3" id="priceSection" style="display:none;">
+                        <label class="form-label">Sale Price (UGX)</label>
+                        <input type="number" name="price" id="priceInput" class="form-control" placeholder="e.g. 150000" min="0">
+                    </div>
+                    <div class="mb-3" id="rateSection" style="display:none;">
+                        <label class="form-label">Daily Hire Rate (UGX / day)</label>
+                        <input type="number" name="daily_rate" id="rateInput" class="form-control" placeholder="e.g. 5000" min="0">
+                        <div class="form-text text-muted">Amount charged per day when on hire.</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Description <span class="text-muted">(optional)</span></label>
                         <textarea name="description" class="form-control" rows="2"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Add Battery</button>
+                    <a href="/battery/" class="btn ">Back to battery section</a>
                 </form>
             </div>
         </div>
@@ -45,7 +49,7 @@
     <div class="col-md-7">
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-white">
-                <span class="fw-bold">Current Battery Items</span>
+                <span class="fw-bold">Current Batteries</span>
             </div>
             <div class="card-body p-0">
                 <table class="table table-hover mb-0">
@@ -53,7 +57,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Type</th>
-                            <th>Price</th>
+                            <th>Price / Rate</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -62,14 +66,22 @@
                         <tr>
                             <td>{{ battery.name }}</td>
                             <td>{{ battery.get_battery_type_display }}</td>
-                            <td>UGX {{ battery.price }}</td>
+                            <td>
+                                {% if battery.battery_type == 'hire' %}
+                                    UGX {{ battery.daily_rate }}/day
+                                {% else %}
+                                    UGX {{ battery.price }}
+                                {% endif %}
+                            </td>
                             <td>
                                 <form method="POST" style="display:inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="battery_id" value="{{ battery.id }}">
                                     <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                    
                                 </form>
+                                
                             </td>
                         </tr>
                         {% empty %}
@@ -84,4 +96,24 @@
     </div>
 </div>
 
+<script>
+    document.getElementById('typeSelect').addEventListener('change', function () {
+        var type         = this.value;
+        var priceSection = document.getElementById('priceSection');
+        var rateSection  = document.getElementById('rateSection');
+        var priceInput   = document.getElementById('priceInput');
+        var rateInput    = document.getElementById('rateInput');
+        if (type === 'sale') {
+            priceSection.style.display = 'block';
+            rateSection.style.display  = 'none';
+            priceInput.required = true;
+            rateInput.required  = false;
+        } else if (type === 'hire') {
+            priceSection.style.display = 'none';
+            rateSection.style.display  = 'block';
+            priceInput.required = false;
+            rateInput.required  = true;
+        }
+    });
+</script>
 {% endblock %}

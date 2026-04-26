@@ -1,0 +1,80 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Return Battery{% endblock %}
+{% block page_heading %}Return Battery{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">Process Battery Return</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-secondary mb-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <small class="text-muted d-block">Driver</small>
+                            <strong>{{ transaction.driver_name }}</strong>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted d-block">Plate</small>
+                            <strong>{{ transaction.plate }}</strong>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <small class="text-muted d-block">Battery</small>
+                            <strong>{{ transaction.battery.name }}</strong>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <small class="text-muted d-block">Daily Rate</small>
+                            <strong>UGX {{ transaction.battery.daily_rate }}/day</strong>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <small class="text-muted d-block">Date Taken</small>
+                            <strong>{{ transaction.date_taken|date:"h:i A — M d, Y" }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Return Date &amp; Time</label>
+                        <input type="datetime-local" name="date_returned" id="dateReturned"
+                               class="form-control" value="{{ default_datetime }}" required>
+                        <div class="form-text text-muted">Defaults to now — change only if needed.</div>
+                    </div>
+
+                    <div class="alert alert-success mb-4">
+                        <span id="feeText">Calculating...</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 fw-bold">Confirm Return &amp; Calculate Fee</button>
+                    <a href="{% url 'battery_list' %}" class="btn btn-outline-secondary w-100 mt-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var dateTaken = new Date("{{ transaction.date_taken|date:'c' }}");
+    var dailyRate = {{ transaction.battery.daily_rate }};
+
+    function updatePreview() {
+        var returnDt = new Date(document.getElementById('dateReturned').value);
+        var el       = document.getElementById('feeText');
+        var msec     = returnDt - dateTaken;
+        if (isNaN(msec) || msec <= 0) {
+            el.textContent = 'Return time must be after date taken.';
+            return;
+        }
+        var days = Math.ceil(msec / 86400000);
+        if (days < 1) days = 1;
+        el.innerHTML = 'Days hired: <strong>' + days + '</strong> &nbsp;|&nbsp; Total to pay: <strong>UGX ' + (days * dailyRate).toLocaleString() + '</strong>';
+    }
+
+    document.getElementById('dateReturned').addEventListener('change', updatePreview);
+    updatePreview();
+</script>
+{% endblock %}

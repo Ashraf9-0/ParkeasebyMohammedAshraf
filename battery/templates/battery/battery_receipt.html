@@ -1,0 +1,55 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Battery Receipt{% endblock %}
+{% block page_heading %}Battery Receipt{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white text-center">
+                <h5 class="mb-0 fw-bold">✓ Battery Returned — Payment Summary</h5>
+            </div>
+            <div class="card-body p-4">
+                <table class="table table-borderless mb-0">
+                    <tr>
+                        <td class="text-muted">Driver</td>
+                        <td class="fw-bold">{{ transaction.driver_name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Plate</td>
+                        <td class="fw-bold">{{ transaction.plate }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Battery</td>
+                        <td class="fw-bold">{{ transaction.battery.name }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Daily Rate</td>
+                        <td>UGX {{ transaction.battery.daily_rate }} / day</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Date Taken</td>
+                        <td>{{ transaction.date_taken|date:"h:i A — M d, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Date Returned</td>
+                        <td>{{ transaction.date_returned|date:"h:i A — M d, Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Days Hired</td>
+                        <td>{{ transaction.days_hired }} day(s)</td>
+                    </tr>
+                    <tr class="table-success">
+                        <td class="fw-bold fs-5">Total Charged</td>
+                        <td class="fw-bold fs-5">UGX {{ transaction.total_charged }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer bg-white">
+                <a href="{% url 'battery_list' %}" class="btn btn-primary">Back to Battery List</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
