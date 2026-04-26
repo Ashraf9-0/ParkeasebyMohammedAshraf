@@ -1,0 +1,71 @@
+{% extends 'parking/base.html' %}
+{% load static %}
+{% block title %}Edit Tyre Service{% endblock %}
+{% block page_heading %}Edit Tyre Service{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">Edit Service — {{ service.plate }}</h5>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Driver Name</label>
+                            <input type="text" name="driver_name" class="form-control"
+                                   value="{{ service.driver_name }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Number Plate</label>
+                            <input type="text" name="plate" class="form-control"
+                                   value="{{ service.plate }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Service Type</label>
+                        <select name="service_type" class="form-select" id="serviceType" required>
+                            <option value="pressure"  {% if service.service_type == 'pressure' %}selected{% endif %}>Pressure Check — UGX 500</option>
+                            <option value="puncture"  {% if service.service_type == 'puncture' %}selected{% endif %}>Puncture Fixing — UGX 5,000</option>
+                            <option value="valve"     {% if service.service_type == 'valve'    %}selected{% endif %}>Valve Replacement — UGX 5,000</option>
+                            <option value="tyre_13"   {% if service.service_type == 'tyre_13'  %}selected{% endif %}>Tyre Size 13</option>
+                            <option value="tyre_14"   {% if service.service_type == 'tyre_14'  %}selected{% endif %}>Tyre Size 14</option>
+                            <option value="tyre_15"   {% if service.service_type == 'tyre_15'  %}selected{% endif %}>Tyre Size 15</option>
+                            <option value="tyre_16"   {% if service.service_type == 'tyre_16'  %}selected{% endif %}>Tyre Size 16</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="tyrePriceField"
+                         style="display:{% if service.service_type|slice:':5' == 'tyre_' %}block{% else %}none{% endif %};">
+                        <label class="form-label">Tyre Price (UGX)</label>
+                        <input type="number" name="custom_price" class="form-control"
+                               value="{{ service.price }}" placeholder="Enter price for this tyre size">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Notes <span class="text-muted">(optional)</span></label>
+                        <textarea name="notes" class="form-control" rows="3">{{ service.notes }}</textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                        <a href="{% url 'tyre_list' %}" class="btn btn-outline-secondary w-100">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('serviceType').addEventListener('change', function () {
+        var field = document.getElementById('tyrePriceField');
+        field.style.display = this.value.startsWith('tyre_') ? 'block' : 'none';
+    });
+</script>
+{% endblock %}

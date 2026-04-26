@@ -47,3 +47,30 @@ def tyre_list(request):
 def tyre_receipt(request, pk):
     service = get_object_or_404(TyreService, pk=pk)
     return render(request, 'tyre/tyre_receipt.html', {'service': service})
+
+@login_required
+def tyre_edit(request, pk):
+    service = get_object_or_404(TyreService, pk=pk)
+    if request.method == 'POST':
+        service_type = request.POST['service_type']
+        if service_type.startswith('tyre_'):
+            price = int(request.POST.get('custom_price', 0))
+        else:
+            price = TYRE_PRICES.get(service_type, service.price)
+        service.plate        = request.POST['plate'].upper()
+        service.driver_name  = request.POST['driver_name']
+        service.service_type = service_type
+        service.price        = price
+        service.notes        = request.POST.get('notes', '')
+        service.save()
+        return redirect('tyre_receipt', pk=service.pk)
+    return render(request, 'tyre/tyre_edit.html', {'service': service})
+
+
+@login_required
+def tyre_delete(request, pk):
+    service = get_object_or_404(TyreService, pk=pk)
+    if request.method == 'POST':
+        service.delete()
+        return redirect('tyre_list')
+    return render(request, 'tyre/tyre_confirm_delete.html', {'service': service})

@@ -51,9 +51,12 @@
                     <td>{{ service.get_service_type_display }}</td>
                     <td>UGX {{ service.price }}</td>
                     <td>{{ service.date|date:"h:i A — M d, Y" }}</td>
-                    <td>
-                        <a href="{% url 'tyre_receipt' service.pk %}" class="btn btn-sm btn-outline-primary">Receipt</a>
-                    </td>
+                    
+                    <td class="d-flex gap-1">
+                       <a href="{% url 'tyre_receipt' service.pk %}" class="btn btn-sm btn-outline-primary">Receipt</a>
+                       <a href="{% url 'tyre_edit' service.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                       <a href="{% url 'tyre_delete' service.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                     </td>
                 </tr>
                 {% empty %}
                 <tr>
