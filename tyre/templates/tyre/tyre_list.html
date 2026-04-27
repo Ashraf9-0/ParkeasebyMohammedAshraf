@@ -53,10 +53,12 @@
                     <td>{{ service.date|date:"h:i A — M d, Y" }}</td>
                     
                     <td class="d-flex gap-1">
-                       <a href="{% url 'tyre_receipt' service.pk %}" class="btn btn-sm btn-outline-primary">Receipt</a>
-                       <a href="{% url 'tyre_edit' service.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
-                       <a href="{% url 'tyre_delete' service.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
-                     </td>
+                      <a href="{% url 'tyre_receipt' service.pk %}" class="btn btn-sm btn-outline-primary">Receipt</a>
+                        {% if user.username == "admin" %}
+                            <a href="{% url 'tyre_edit' service.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            <a href="{% url 'tyre_delete' service.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% empty %}
                 <tr>

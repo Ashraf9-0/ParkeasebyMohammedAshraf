@@ -112,3 +112,40 @@ def battery_prices(request):
             battery.delete()
         return redirect('battery_prices')
     return render(request, 'battery/battery_prices.html', {'batteries': batteries})
+
+@login_required
+def battery_edit(request, pk):
+    if request.user.username != 'admin':
+        return redirect('battery_list')
+    transaction = get_object_or_404(BatteryTransaction, pk=pk)
+    if request.method == 'POST':
+        battery  = get_object_or_404(BatteryItem, pk=request.POST['battery_id'])
+        date_str = request.POST.get('date_taken', '').strip()
+        try:
+            date_taken = timezone.make_aware(datetime.strptime(date_str, '%Y-%m-%dT%H:%M'))
+        except (ValueError, TypeError):
+            date_taken = transaction.date_taken
+        transaction.battery     = battery
+        transaction.plate       = request.POST['plate'].upper()
+        transaction.driver_name = request.POST['driver_name']
+        transaction.date_taken  = date_taken
+        transaction.save()
+        return redirect('battery_list')
+    now = timezone.localtime(timezone.now())
+    batteries = BatteryItem.objects.all()
+    return render(request, 'battery/battery_edit.html', {
+        'transaction':      transaction,
+        'batteries':        batteries,
+        'default_datetime': transaction.date_taken.strftime('%Y-%m-%dT%H:%M'),
+    })
+
+
+@login_required
+def battery_delete(request, pk):
+    if request.user.username != 'admin':
+        return redirect('battery_list')
+    transaction = get_object_or_404(BatteryTransaction, pk=pk)
+    if request.method == 'POST':
+        transaction.delete()
+        return redirect('battery_list')
+    return render(request, 'battery/battery_confirm_delete.html', {'transaction': transaction})

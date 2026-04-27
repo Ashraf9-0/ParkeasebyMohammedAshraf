@@ -21,7 +21,8 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Phone Number</label>
-                            <input type="text" name="phone" class="form-control" placeholder="e.g. 0701234567" required>
+                            <input type="text" name="phone" class="form-control" placeholder="e.g. 0701234567"
+                                pattern="\d{10}" maxlength="10" minlength="10" title="Phone number must be exactly 10 digits" required>
                         </div>
                     </div>
 

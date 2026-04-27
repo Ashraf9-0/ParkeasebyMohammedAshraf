@@ -57,6 +57,10 @@
                 {% else %}
                     <a href="{% url 'receipt' vehicle.transactions.last.pk %}" class="btn btn-outline-primary">View Receipt</a>
                 {% endif %}
+                {% if user.username == "admin" %}
+                    <a href="{% url 'vehicle_edit' vehicle.pk %}" class="btn btn-outline-secondary">Edit</a>
+                    <a href="{% url 'vehicle_delete' vehicle.pk %}" class="btn btn-outline-danger">Delete</a>
+                {% endif %}
                 <a href="{% url 'vehicle_list' %}" class="btn btn-outline-secondary ms-auto">Back</a>
             </div>
         </div>

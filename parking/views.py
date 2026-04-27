@@ -222,3 +222,36 @@ def daily_report(request):
         'date':            date,
     }
     return render(request, 'parking/daily_report.html', context)
+@login_required
+def vehicle_edit(request, pk):
+    if request.user.username != 'admin':
+        return redirect('vehicle_list')
+    vehicle = get_object_or_404(Vehicle, pk=pk)
+    if request.method == 'POST':
+        arrival_date     = request.POST['arrival_date']
+        arrival_time_str = request.POST['arrival_time']
+        arrival_datetime = make_aware(
+            parse_datetime(f"{arrival_date}T{arrival_time_str}:00")
+        )
+        vehicle.driver_name  = request.POST['driver_name']
+        vehicle.phone        = request.POST['phone']
+        vehicle.plate        = request.POST['plate'].upper().strip()
+        vehicle.vehicle_type = request.POST['vehicle_type']
+        vehicle.model        = request.POST.get('model', '')
+        vehicle.color        = request.POST.get('color', '')
+        vehicle.nin          = request.POST.get('nin', '')
+        vehicle.arrival_time = arrival_datetime
+        vehicle.save()
+        return redirect('vehicle_detail', pk=vehicle.pk)
+    return render(request, 'parking/vehicle_edit.html', {'vehicle': vehicle})
+
+
+@login_required
+def vehicle_delete(request, pk):
+    if request.user.username != 'admin':
+        return redirect('vehicle_list')
+    vehicle = get_object_or_404(Vehicle, pk=pk)
+    if request.method == 'POST':
+        vehicle.delete()
+        return redirect('vehicle_list')
+    return render(request, 'parking/vehicle_confirm_delete.html', {'vehicle': vehicle})

@@ -9,4 +9,6 @@ urlpatterns = [
     path('sign-out/<int:pk>/', views.sign_out_vehicle, name='sign_out'),
     path('receipt/<int:pk>/', views.receipt, name='receipt'),
     path('report/', views.daily_report, name='daily_report'),
+    path('vehicle/edit/<int:pk>/',   views.vehicle_edit,   name='vehicle_edit'),
+path('vehicle/delete/<int:pk>/', views.vehicle_delete, name='vehicle_delete'),
 ]

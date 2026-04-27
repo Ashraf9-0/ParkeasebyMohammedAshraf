@@ -38,10 +38,14 @@
                             <span class="badge bg-secondary">Signed Out</span>
                         {% endif %}
                     </td>
-                    <td>
+                    <td class="d-flex gap-1">
                         <a href="{% url 'vehicle_detail' vehicle.pk %}" class="btn btn-sm btn-outline-primary">View</a>
                         {% if vehicle.status == 'parked' %}
                             <a href="{% url 'sign_out' vehicle.pk %}" class="btn btn-sm btn-outline-warning">Sign Out</a>
+                        {% endif %}
+                        {% if user.username == "admin" %}
+                            <a href="{% url 'vehicle_edit' vehicle.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            <a href="{% url 'vehicle_delete' vehicle.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
                         {% endif %}
                     </td>
                 </tr>
