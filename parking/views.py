@@ -161,7 +161,7 @@ def sign_out_vehicle(request, pk):
             vehicle        = vehicle,
             receipt_number = generate_receipt(),
             receiver_name  = request.POST['receiver_name'],
-            receiver_phone = request.POST['receiver_phone'],
+            receiver_phone = request.POST['phone'],
             gender         = request.POST['gender'],
             nin            = request.POST.get('nin', ''),
             sign_out_time  = sign_out_time,
